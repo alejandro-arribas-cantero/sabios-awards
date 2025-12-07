@@ -22,6 +22,9 @@
             "dest": "/static/$1"
         },
         {
+            "handle": "filesystem"
+        },
+        {
             "src": "/(.*)",
             "dest": "mvp_vote/wsgi.py"
         }
