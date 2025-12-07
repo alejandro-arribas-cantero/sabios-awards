@@ -102,7 +102,9 @@ CRONJOBS = [
     ('0 19 1 * *', 'apps.voting.cron.reveal_winner'),
 ]
 
-# Media Files (Cloudinary) - Defensively placed in base to ensure it loads if env var is present
-if os.environ.get('CLOUDINARY_URL'):
-    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+# Media Files (Cloudinary)
+# Check for CLOUDINARY_URL or separate credentials
+if os.environ.get('CLOUDINARY_URL') or os.environ.get('CLOUDINARY_CLOUD_NAME'):
+    if 'cloudinary_storage' not in INSTALLED_APPS:
+        INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
