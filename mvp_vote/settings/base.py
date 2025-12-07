@@ -104,7 +104,14 @@ CRONJOBS = [
 
 # Media Files (Cloudinary)
 # Check for CLOUDINARY_URL or separate credentials
+# DEBUG: Print environment keys to debug deployment
+import os
+print(f"DEBUG: Checking Cloudinary. Available keys: {[k for k in os.environ.keys() if 'CLOUD' in k]}")
+
 if os.environ.get('CLOUDINARY_URL') or os.environ.get('CLOUDINARY_CLOUD_NAME'):
+    print("DEBUG: Cloudinary config ENABLED")
     if 'cloudinary_storage' not in INSTALLED_APPS:
         INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+else:
+    print("DEBUG: Cloudinary config DISABLED (Var not found)")
