@@ -33,6 +33,8 @@
                     </div>
                     <div class="d-flex align-items-center">
                         <span class="badge bg-secondary me-3">{{ candidate.votes.count }} votos</span>
+                        <a href="{% url 'admin_candidate_update' candidate.pk %}"
+                            class="btn btn-sm btn-outline-warning me-2">Editar</a>
                         <a href="{% url 'admin_candidate_delete' candidate.pk %}"
                             class="btn btn-sm btn-outline-danger">Eliminar</a>
                     </div>

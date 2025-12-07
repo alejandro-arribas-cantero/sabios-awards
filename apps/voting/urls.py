@@ -2,7 +2,7 @@ from django.urls import path
 from .views import VoteView, ResultsView, HallOfFameView
 from .views_admin import (
     AdminDashboardView, VotingPeriodListView, VotingPeriodCreateView, 
-    VotingPeriodUpdateView, VotingPeriodDeleteView, CandidateCreateView, CandidateDeleteView, StatsView
+    VotingPeriodUpdateView, VotingPeriodDeleteView, CandidateCreateView, CandidateUpdateView, CandidateDeleteView, StatsView
 )
 
 urlpatterns = [
@@ -18,6 +18,7 @@ urlpatterns = [
     path('admin/periods/<int:pk>/update/', VotingPeriodUpdateView.as_view(), name='admin_period_update'),
     path('admin/periods/<int:pk>/delete/', VotingPeriodDeleteView.as_view(), name='admin_period_delete'),
     path('admin/candidates/create/<int:period_id>/', CandidateCreateView.as_view(), name='admin_candidate_create'),
+    path('admin/candidates/<int:pk>/update/', CandidateUpdateView.as_view(), name='admin_candidate_update'),
     path('admin/candidates/<int:pk>/delete/', CandidateDeleteView.as_view(), name='admin_candidate_delete'),
     path('admin/stats/', StatsView.as_view(), name='admin_stats'),
 ]

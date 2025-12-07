@@ -3,10 +3,11 @@ import os
 from dotenv import load_dotenv
 from urllib.parse import urlparse, parse_qsl
 
-load_dotenv()
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# Load .env file
+load_dotenv(BASE_DIR / '.env')
 
 # Application definition
 INSTALLED_APPS = [
@@ -105,7 +106,6 @@ CRONJOBS = [
 # Media Files (Cloudinary)
 # Check for CLOUDINARY_URL or separate credentials
 import os
-print(f"DEBUG: Checking Cloudinary. Available keys: {[k for k in os.environ.keys() if 'CLOUD' in k]}")
 
 # Define STORAGES default structure (fallback) if not defined by prod (though prod imports base, so base runs first)
 # Actually, base runs first. So define defaults here.
@@ -120,7 +120,6 @@ if 'STORAGES' not in locals():
     }
 
 if os.environ.get('CLOUDINARY_URL') or os.environ.get('CLOUDINARY_CLOUD_NAME'):
-    print("DEBUG: Cloudinary config ENABLED")
     if 'cloudinary_storage' not in INSTALLED_APPS:
         INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
     
@@ -129,5 +128,3 @@ if os.environ.get('CLOUDINARY_URL') or os.environ.get('CLOUDINARY_CLOUD_NAME'):
     
     # Legacy fallback (just in case)
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
-else:
-    print("DEBUG: Cloudinary config DISABLED (Var not found)")
