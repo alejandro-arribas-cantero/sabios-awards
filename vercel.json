@@ -1,0 +1,14 @@
+{
+    "builds": [
+        {
+            "src": "mvp_vote/wsgi.py",
+            "use": "@vercel/python"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/(.*)",
+            "dest": "mvp_vote/wsgi.py"
+        }
+    ]
+}
