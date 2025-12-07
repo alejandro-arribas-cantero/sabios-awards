@@ -57,6 +57,10 @@ class CandidateCreateView(AdminRequiredMixin, CreateView):
         return reverse_lazy('admin_period_update', kwargs={'pk': self.object.period.pk})
 
     def get_initial(self):
+        # DEBUG: Check storage settings
+        from django.conf import settings
+        print(f"DEBUG IN VIEW: DEFAULT_FILE_STORAGE = {getattr(settings, 'DEFAULT_FILE_STORAGE', 'NOT SET')}")
+        
         initial = super().get_initial()
         period_id = self.kwargs.get('period_id')
         if period_id:
