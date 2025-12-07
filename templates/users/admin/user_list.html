@@ -3,7 +3,12 @@
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-4">
     <h1>Gestión de Usuarios</h1>
-    <span class="badge bg-primary">{{ users.count }} Usuarios</span>
+    <div class="d-flex align-items-center gap-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createUserModal">
+            Crear Usuario
+        </button>
+        <span class="badge bg-primary">{{ users.count }} Usuarios</span>
+    </div>
 </div>
 
 <div class="card">
@@ -94,4 +99,63 @@
         {% endif %}
     </div>
 </div>
+</div>
+
+<!-- Modal Crear Usuario -->
+<div class="modal fade" id="createUserModal" tabindex="-1" aria-labelledby="createUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-white border-secondary">
+            <div class="modal-header border-secondary">
+                <h5 class="modal-title" id="createUserModalLabel">Crear Nuevo Usuario</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <form method="post" action="{% url 'admin_user_create' %}">
+                <div class="modal-body">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        Error al crear el usuario. Por favor verifica los datos.
+                    </div>
+                    {% endif %}
+
+                    {% for field in form %}
+                    <div class="mb-3">
+                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        <div class="text-secondary small mt-1">{{ field.help_text|safe }}</div>
+                        {% for error in field.errors %}
+                        <div class="text-danger small">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="modal-footer border-secondary">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Crear Usuario</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add bootstrap classes to form inputs
+        const inputs = document.querySelectorAll('#createUserModal input');
+        inputs.forEach(input => {
+            input.classList.add('form-control');
+            input.classList.add('bg-dark');
+            input.classList.add('text-white');
+            input.classList.add('border-secondary');
+        });
+
+        // Auto open if flag is set (on error)
+        {% if show_modal %}
+        var myModal = new bootstrap.Modal(document.getElementById('createUserModal'));
+        myModal.show();
+        {% endif %}
+    });
+</script>
 {% endblock %}
