@@ -104,14 +104,30 @@ CRONJOBS = [
 
 # Media Files (Cloudinary)
 # Check for CLOUDINARY_URL or separate credentials
-# DEBUG: Print environment keys to debug deployment
 import os
 print(f"DEBUG: Checking Cloudinary. Available keys: {[k for k in os.environ.keys() if 'CLOUD' in k]}")
+
+# Define STORAGES default structure (fallback) if not defined by prod (though prod imports base, so base runs first)
+# Actually, base runs first. So define defaults here.
+if 'STORAGES' not in locals():
+    STORAGES = {
+        "default": {
+            "BACKEND": "django.core.files.storage.FileSystemStorage",
+        },
+        "staticfiles": {
+            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
+        },
+    }
 
 if os.environ.get('CLOUDINARY_URL') or os.environ.get('CLOUDINARY_CLOUD_NAME'):
     print("DEBUG: Cloudinary config ENABLED")
     if 'cloudinary_storage' not in INSTALLED_APPS:
         INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+    
+    # Django 5.x uses STORAGES
+    STORAGES["default"]["BACKEND"] = "cloudinary_storage.storage.MediaCloudinaryStorage"
+    
+    # Legacy fallback (just in case)
     DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 else:
     print("DEBUG: Cloudinary config DISABLED (Var not found)")
