@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card p-4 text-center">
+            <h2 class="text-danger mb-4">¿Eliminar Votación?</h2>
+            <p class="text-white">Estás a punto de eliminar la votación de <strong class="text-primary">{{object.month_name }} {{ object.year }}</strong>.</p>
+            <p class="text-muted mb-4">Esta acción no se puede deshacer y borrará todos los votos asociados.</p>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger me-2">Sí, eliminar</button>
+                <a href="{% url 'admin_period_list' %}" class="btn btn-outline-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

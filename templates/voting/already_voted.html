@@ -1,0 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="text-center mt-5">
+    <h2>✅ Ya has votado</h2>
+    <p class="lead">Gracias por participar en la votación de {{ period.month }}/{{ period.year }}.</p>
+    <a href="{% url 'dashboard' %}" class="btn btn-primary">Volver al Dashboard</a>
+</div>
+{% endblock %}

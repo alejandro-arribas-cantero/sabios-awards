@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block title %}Admin Dashboard - Sabios Awards{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12">
+        <h1 class="text-danger">Panel de Administración</h1>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-3">
+        <div class="card bg-primary mb-3">
+            <div class="card-header">Votaciones</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ periods.count }} Recientes</h5>
+                <p class="card-text">Gestiona los periodos de votación.</p>
+                <a href="{% url 'admin_period_list' %}" class="btn btn-light text-primary">Gestionar</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success mb-3">
+            <div class="card-header">Estadísticas</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_votes }} Votos Totales</h5>
+                <p class="card-text">Ver métricas avanzadas.</p>
+                <a href="{% url 'admin_stats' %}" class="btn btn-light text-success">Ver Stats</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info mb-3">
+            <div class="card-header">Candidatos</div>
+            <div class="card-body">
+                <h5 class="card-title">{{ total_candidates }} Total</h5>
+                <p class="card-text">Candidatos registrados históricamente.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-dark mb-3">
+            <div class="card-header">Usuarios</div>
+            <div class="card-body">
+                <h5 class="card-title">Gestión</h5>
+                <p class="card-text">Control de acceso y usuarios.</p>
+                <a href="{% url 'admin_user_list' %}" class="btn btn-light text-dark">Gestionar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <h3>Últimas Votaciones</h3>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Periodo</th>
+                    <th>Estado</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for p in periods %}
+                <tr>
+                    <td>{{ p.month }}/{{ p.year }}</td>
+                    <td>
+                        {% if p.status == 'OPEN' %}
+                        <span class="badge bg-success">Abierta</span>
+                        {% elif p.status == 'CLOSED' %}
+                        <span class="badge bg-secondary">Cerrada</span>
+                        {% else %}
+                        <span class="badge bg-info text-dark">Pública</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a href="{% url 'admin_period_update' p.id %}" class="btn btn-sm btn-outline-warning">Editar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

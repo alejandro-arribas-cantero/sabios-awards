@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Salón de la Fama - Sabios Awards{% endblock %}
+
+{% block content %}
+<div class="row mb-5 text-center">
+    <div class="col-12">
+        <h1 class="display-4 fw-bold text-primary">🏆 Salón de la Fama</h1>
+        <p class="lead text-muted">Las leyendas que han hecho historia.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for legend in legends %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm">
+            <div class="position-relative">
+                <img src="{{ legend.winner_photo.url }}" class="card-img-top"
+                    alt="Ganador {{ legend.month }}/{{ legend.year }}" style="height: 300px; object-fit: cover;">
+                <div class="position-absolute top-0 end-0 bg-dark text-white px-3 py-1 fw-bold rounded-start mt-3"
+                    style="opacity: 0.9; border: 1px solid var(--gold);">
+                    {{ legend.month }}/{{ legend.year }}
+                </div>
+            </div>
+            <div class="card-body text-center">
+                <h3 class="card-title fw-bold">MVP del Mes</h3>
+                <a href="{% url 'period_results' legend.id %}" class="btn btn-outline-primary mt-3">Ver Estadísticas</a>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <div class="text-muted">
+            <h3>Aún no hay leyendas...</h3>
+            <p>¡Sé el primero en votar para crear historia!</p>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

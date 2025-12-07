@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Gestión de Votaciones</h1>
+    <a href="{% url 'admin_period_create' %}" class="btn btn-primary">Nueva Votación</a>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Mes/Año</th>
+                    <th>Estado</th>
+                    <th>Ganador</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for period in periods %}
+                <tr>
+                    <td>{{ period.id }}</td>
+                    <td>{{ period.month }}/{{ period.year }}</td>
+                    <td>
+                        {% if period.status == 'OPEN' %}
+                        <span class="badge bg-success">Abierta</span>
+                        {% elif period.status == 'CLOSED' %}
+                        <span class="badge bg-secondary">Cerrada</span>
+                        {% else %}
+                        <span class="badge bg-info text-dark">Pública</span>
+                        {% endif %}
+                    </td>
+                    <td>{% if period.winner_photo %}📸{% else %}-{% endif %}</td>
+                    <td>
+                        <a href="{% url 'admin_period_update' period.id %}"
+                            class="btn btn-sm btn-outline-warning">Editar</a>
+                        <a href="{% url 'admin_period_delete' period.id %}"
+                            class="btn btn-sm btn-outline-danger">Eliminar</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

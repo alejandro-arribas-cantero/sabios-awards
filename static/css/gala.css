@@ -1,0 +1,423 @@
+/* Gala Theme - Refined Minimalist Luxury */
+:root {
+    --gold: #c5a059;
+    --gold-hover: #d4af37;
+    --dark-bg: #0f0f0f;
+    --card-bg: #1a1a1a;
+    --text-main: #ffffff;
+    --text-muted: #b0b0b0;
+    --border-color: rgba(197, 160, 89, 0.2);
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--dark-bg);
+    color: var(--text-main);
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background-color: rgba(15, 15, 15, 0.95) !important;
+    border-bottom: 1px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.navbar-brand {
+    color: #fff !important;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    letter-spacing: 1px;
+    font-size: 1.5rem;
+}
+
+.navbar-brand span {
+    color: var(--gold);
+}
+
+.nav-link {
+    color: var(--text-muted) !important;
+    font-weight: 500;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+}
+
+.nav-link:hover,
+.nav-link.active {
+    color: var(--gold) !important;
+}
+
+/* Cards */
+.card {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(197, 160, 89, 0.15);
+    border-color: var(--gold);
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-main);
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    padding-top: 1.5rem;
+    padding-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.card-body {
+    padding: 2rem;
+}
+
+.card-title {
+    color: var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+.card-text {
+    color: var(--text-muted);
+    font-weight: 300;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 4px;
+    padding: 0.6rem 1.5rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.8rem;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background-color: var(--gold);
+    border: 1px solid var(--gold);
+    color: #000;
+}
+
+.btn-primary:hover {
+    background-color: #fff;
+    border-color: #fff;
+    color: #000;
+    transform: translateY(-2px);
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline-primary {
+    color: var(--gold);
+    border-color: var(--gold);
+    background-color: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--gold);
+    color: #000;
+    box-shadow: 0 0 10px rgba(197, 160, 89, 0.4);
+}
+
+.btn-outline-dark {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.btn-outline-dark:hover {
+    background-color: #fff;
+    color: #000;
+    border-color: #fff;
+}
+
+.btn-secondary,
+.btn-outline-secondary {
+    border-color: var(--text-muted);
+    color: var(--text-muted);
+}
+
+.btn-secondary:hover,
+.btn-outline-secondary:hover {
+    background-color: var(--text-muted);
+    color: #000;
+}
+
+.btn-warning {
+    background-color: #fff;
+    color: #000;
+    border: 1px solid #fff;
+}
+
+.btn-warning:hover {
+    background-color: var(--gold);
+    border-color: var(--gold);
+    color: #000;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5 {
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+}
+
+h1 {
+    font-weight: 700;
+}
+
+.text-muted {
+    color: var(--text-muted) !important;
+}
+
+.text-primary {
+    color: var(--gold) !important;
+}
+
+.text-success {
+    color: #50fa7b !important;
+}
+
+.text-danger {
+    color: #ff5555 !important;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    background-color: #252525;
+    border: 1px solid #333;
+    color: #fff;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #252525;
+    border-color: var(--gold);
+    color: #fff;
+    box-shadow: 0 0 0 0.25rem rgba(197, 160, 89, 0.25);
+}
+
+/* File Input */
+input[type="file"]::file-selector-button {
+    background-color: #333;
+    color: #fff;
+    border: 1px solid #444;
+    padding: 0.375rem 0.75rem;
+    margin-right: 1rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+}
+
+input[type="file"]::file-selector-button:hover {
+    background-color: #444;
+}
+
+/* Tables */
+.table {
+    color: var(--text-main);
+    border-color: #333;
+}
+
+.table-striped>tbody>tr:nth-of-type(odd)>* {
+    color: var(--text-main);
+    background-color: rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+}
+
+.table-striped>tbody>tr:nth-of-type(even)>* {
+    color: var(--text-main);
+    background-color: transparent;
+    box-shadow: none;
+}
+
+.table> :not(caption)>*>* {
+    background-color: transparent;
+    border-bottom-color: #333;
+}
+
+.table thead th {
+    color: var(--gold);
+    border-bottom: 2px solid var(--gold);
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.table td,
+.table th,
+.table tr {
+    color: var(--text-main) !important;
+}
+
+/* Alerts */
+.alert-success {
+    background-color: rgba(80, 250, 123, 0.1);
+    border-color: rgba(80, 250, 123, 0.3);
+    color: #50fa7b;
+}
+
+.alert-warning {
+    background-color: rgba(255, 184, 108, 0.1);
+    border-color: rgba(255, 184, 108, 0.3);
+    color: #ffb86c;
+}
+
+.alert-danger {
+    background-color: rgba(255, 85, 85, 0.1);
+    border-color: rgba(255, 85, 85, 0.3);
+    color: #ff5555;
+}
+
+.alert-info {
+    background-color: rgba(139, 233, 253, 0.1);
+    border-color: rgba(139, 233, 253, 0.3);
+    color: #8be9fd;
+}
+
+/* Progress Bars */
+.progress {
+    background-color: #333;
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    background-color: var(--gold);
+}
+
+/* List Groups */
+.list-group-item {
+    background-color: transparent;
+    border-color: #333;
+    color: var(--text-muted);
+}
+
+/* Footer */
+footer {
+    border-top: 1px solid #333;
+    color: #555;
+    margin-top: 4rem;
+    padding-top: 2rem;
+}
+
+/* Badges */
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.bg-light {
+    background-color: #333 !important;
+    color: #fff !important;
+    border: 1px solid #444;
+}
+
+.bg-secondary {
+    background-color: #444 !important;
+    color: #ccc !important;
+}
+
+/* Admin Cards Overrides */
+.card.bg-primary,
+.card.bg-success,
+.card.bg-info,
+.card.bg-dark {
+    background-color: var(--card-bg) !important;
+    border-top: 3px solid;
+}
+
+.card.bg-primary {
+    border-top-color: #0d6efd;
+}
+
+.card.bg-success {
+    border-top-color: #198754;
+}
+
+.card.bg-info {
+    border-top-color: #0dcaf0;
+}
+
+.card.bg-dark {
+    border-top-color: #6c757d;
+}
+
+.card.bg-primary .card-title,
+.card.bg-success .card-title,
+.card.bg-info .card-title,
+.card.bg-dark .card-title {
+    color: #fff !important;
+}
+
+.card.bg-primary .card-text,
+.card.bg-success .card-text,
+.card.bg-info .card-text,
+.card.bg-dark .card-text {
+    color: var(--text-muted) !important;
+}
+
+.card.bg-primary .btn-light,
+.card.bg-success .btn-light,
+.card.bg-info .btn-light,
+.card.bg-dark .btn-light {
+    background-color: transparent;
+    border: 1px solid var(--text-muted);
+    color: var(--text-muted) !important;
+}
+
+.card.bg-primary .btn-light:hover,
+.card.bg-success .btn-light:hover,
+.card.bg-info .btn-light:hover,
+.card.bg-dark .btn-light:hover {
+    background-color: #fff;
+    color: #000 !important;
+    border-color: #fff;
+}
+
+/* Form Labels and Help Text */
+.form-label,
+label {
+    color: var(--text-main);
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+}
+
+.form-text {
+    color: var(--text-muted) !important;
+}
+
+/* Links */
+a {
+    color: var(--gold);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #fff;
+}
+
+/* Specific fix for card links if needed */
+.card a:not(.btn) {
+    color: var(--gold);
+}
+
+.card a:not(.btn):hover {
+    color: #fff;
+    text-decoration: underline;
+}

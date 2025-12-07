@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block title %}Votar - Sabios Awards{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-12 text-center">
+        <h1>Votación {{ period.month }}/{{ period.year }}</h1>
+        <p class="lead">Elige al MVP del mes. Solo puedes votar una vez.</p>
+    </div>
+</div>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="row g-4 justify-content-center">
+        {% for candidate in candidates %}
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 candidate-card">
+                {% if candidate.photo %}
+                <img src="{{ candidate.photo.url }}" class="card-img-top" alt="{{ candidate.name }}"
+                    style="height: 250px; object-fit: cover;">
+                {% else %}
+                <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                    style="height: 250px;">
+                    <span>Sin Foto</span>
+                </div>
+                {% endif %}
+                <div class="card-body text-center">
+                    <h5 class="card-title fw-bold">{{ candidate.name }}</h5>
+                    <div class="form-check mt-3 d-inline-block">
+                        <input class="form-check-input" type="radio" name="candidate" id="cand_{{ candidate.id }}"
+                            value="{{ candidate.id }}" required>
+                        <label class="form-check-label stretched-link" for="cand_{{ candidate.id }}">
+                            Seleccionar
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12 text-center">
+            <p class="text-muted">No hay candidatos definidos para esta votación.</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if candidates %}
+    <div class="row mt-5">
+        <div class="col-12 text-center">
+            <button type="submit" class="btn btn-primary btn-lg px-5">Confirmar Voto</button>
+            <a href="{% url 'dashboard' %}" class="btn btn-link text-muted">Cancelar</a>
+        </div>
+    </div>
+    {% endif %}
+</form>
+
+<style>
+    .candidate-card {
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .candidate-card:hover {
+        transform: scale(1.02);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Hide radio but keep accessible? Or just style it. */
+</style>
+{% endblock %}
