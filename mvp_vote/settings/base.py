@@ -101,3 +101,8 @@ CRONJOBS = [
     ('59 23 28-31 * *', 'apps.voting.cron.close_monthly_vote'), # Needs logic to check if it is last day
     ('0 19 1 * *', 'apps.voting.cron.reveal_winner'),
 ]
+
+# Media Files (Cloudinary) - Defensively placed in base to ensure it loads if env var is present
+if os.environ.get('CLOUDINARY_URL'):
+    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
