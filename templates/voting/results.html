@@ -18,12 +18,13 @@
             <div class="mb-4">
                 <div class="d-flex justify-content-between mb-1">
                     <span class="fw-bold text-white">{{ stat.candidate.name }}</span>
-                    <span class="text-muted">{{ stat.votes }} votos ({{ stat.percentage|stringformat:".1f" }}%)</span>
+                    <span class="fw-bold"
+                        style="color: {% if forloop.counter == 1 %}var(--gold){% elif forloop.counter == 2 %}var(--silver){% elif forloop.counter == 3 %}var(--bronze){% else %}var(--text-muted){% endif %};">
+                        {{ stat.votes }} votos ({{ stat.percentage|stringformat:".1f" }}%)
+                    </span>
                 </div>
                 <div class="progress" style="height: 25px;">
-                    <div class="progress-bar" role="progressbar"
-                        style="width: {{ stat.percentage }}%; background-color: var(--gold);"
-                        aria-valuenow="{{ stat.percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    <div class="progress-bar" role="progressbar" style="width: {{ stat.percentage|stringformat:" .1f" }}%; background-color: {% if forloop.counter == 1 %}var(--gold){% elif forloop.counter == 2 %}var(--silver){% elif forloop.counter == 3 %}var(--bronze){% else %}#444{% endif %};" aria-valuenow="{{ stat.percentage|stringformat:" .1f" }}" aria-valuemin="0" aria-valuemax="100"></div>
                 </div>
             </div>
             {% endfor %}

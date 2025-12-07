@@ -14,6 +14,7 @@ class VotingPeriod(models.Model):
     year = models.IntegerField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='OPEN')
     winner_photo = models.ImageField(upload_to='winners/', blank=True, null=True)
+    manual_winner = models.ForeignKey('Candidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='won_periods', verbose_name="Ganador Manual")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -34,10 +35,32 @@ class VotingPeriod(models.Model):
         }
         return months.get(self.month, str(self.month))
 
+    def get_winner_candidate(self):
+        if self.manual_winner:
+            return self.manual_winner
+            
+        from django.db.models import Count
+        if not hasattr(self, '_winner_candidate'):
+            self._winner_candidate = self.candidates.annotate(num_votes=Count('votes')).order_by('-num_votes').first()
+        return self._winner_candidate
+
+    @property
+    def resolved_winner_photo(self):
+        if self.winner_photo:
+            return self.winner_photo
+        winner = self.get_winner_candidate()
+        if winner and winner.photo_winner:
+            return winner.photo_winner
+        # Fallback to standard photo if no winner photo
+        if winner and winner.photo:
+            return winner.photo
+        return None
+
 class Candidate(models.Model):
     period = models.ForeignKey(VotingPeriod, on_delete=models.CASCADE, related_name='candidates')
     name = models.CharField(max_length=100)
     photo = models.ImageField(upload_to='candidates/')
+    photo_winner = models.ImageField(upload_to='candidates/winners/', blank=True, null=True, verbose_name="Foto Ganador")
     
     def __str__(self):
         return f"{self.name} ({self.period})"

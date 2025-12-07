@@ -104,6 +104,6 @@ class HallOfFameView(View):
         # Get all revealed periods with a winner photo
         legends = VotingPeriod.objects.filter(
             status='REVEALED'
-        ).exclude(winner_photo='').order_by('-year', '-month')
+        ).order_by('-year', '-month')
         
         return render(request, self.template_name, {'legends': legends})

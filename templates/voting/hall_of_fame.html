@@ -12,11 +12,13 @@
 
 <div class="row g-4">
     {% for legend in legends %}
+    {% with photo=legend.resolved_winner_photo %}
+    {% if photo %}
     <div class="col-md-6 col-lg-4">
         <div class="card h-100 shadow-sm">
             <div class="position-relative">
-                <img src="{{ legend.winner_photo.url }}" class="card-img-top"
-                    alt="Ganador {{ legend.month }}/{{ legend.year }}" style="height: 300px; object-fit: cover;">
+                <img src="{{ photo.url }}" class="card-img-top" alt="Ganador {{ legend.month }}/{{ legend.year }}"
+                    style="height: 300px; object-fit: cover;">
                 <div class="position-absolute top-0 end-0 bg-dark text-white px-3 py-1 fw-bold rounded-start mt-3"
                     style="opacity: 0.9; border: 1px solid var(--gold);">
                     {{ legend.month }}/{{ legend.year }}
@@ -24,10 +26,17 @@
             </div>
             <div class="card-body text-center">
                 <h3 class="card-title fw-bold">MVP del Mes</h3>
+                {% with winner=legend.get_winner_candidate %}
+                {% if winner %}
+                <h4 class="text-primary">{{ winner.name }}</h4>
+                {% endif %}
+                {% endwith %}
                 <a href="{% url 'period_results' legend.id %}" class="btn btn-outline-primary mt-3">Ver Estadísticas</a>
             </div>
         </div>
     </div>
+    {% endif %}
+    {% endwith %}
     {% empty %}
     <div class="col-12 text-center py-5">
         <div class="text-muted">

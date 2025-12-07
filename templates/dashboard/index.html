@@ -42,15 +42,16 @@
                 <h3 class="card-title">Ganador Anterior</h3>
                 {% if last_winner_period %}
                 <p class="text-muted">{{ last_winner_period.month }}/{{ last_winner_period.year }}</p>
-                {% if last_winner_period.winner_photo %}
-                <img src="{{ last_winner_period.winner_photo.url }}" class="img-fluid rounded mb-3"
-                    style="max-height: 150px; object-fit: cover;">
+                {% with photo=last_winner_period.resolved_winner_photo %}
+                {% if photo %}
+                <img src="{{ photo.url }}" class="img-fluid rounded mb-3" style="max-height: 150px; object-fit: cover;">
                 {% else %}
                 <div class="bg-light rounded mb-3 d-flex align-items-center justify-content-center"
                     style="height: 150px;">
                     <span class="text-muted">Sin foto</span>
                 </div>
                 {% endif %}
+                {% endwith %}
                 <a href="{% url 'period_results' last_winner_period.id %}"
                     class="btn btn-outline-primary w-100 mb-2">Ver
                     Detalles</a>
