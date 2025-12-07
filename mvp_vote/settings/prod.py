@@ -38,3 +38,8 @@ CSRF_COOKIE_SECURE = True
 
 # Static files
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage'
+
+# Media Files (Cloudinary)
+if os.environ.get('CLOUDINARY_URL'):
+    INSTALLED_APPS += ['cloudinary_storage', 'cloudinary']
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
