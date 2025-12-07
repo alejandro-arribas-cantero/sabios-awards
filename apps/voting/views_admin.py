@@ -57,9 +57,18 @@ class CandidateCreateView(AdminRequiredMixin, CreateView):
         return reverse_lazy('admin_period_update', kwargs={'pk': self.object.period.pk})
 
     def get_initial(self):
-        # DEBUG: Check storage settings
+        # DEBUG: Check storage settings with ERROR level to force visibility
+        import logging
+        import os
         from django.conf import settings
-        print(f"DEBUG IN VIEW: DEFAULT_FILE_STORAGE = {getattr(settings, 'DEFAULT_FILE_STORAGE', 'NOT SET')}")
+        logger = logging.getLogger(__name__)
+        
+        storage = getattr(settings, 'DEFAULT_FILE_STORAGE', 'NOT SET')
+        c_url = os.environ.get('CLOUDINARY_URL', 'MISSING')
+        if c_url != 'MISSING':
+             c_url = c_url[:15] + "..." # Mask it
+        
+        logger.error(f"🔥 DEBUG PROBE: STORAGE={storage} | CLOUDINARY_URL={c_url}")
         
         initial = super().get_initial()
         period_id = self.kwargs.get('period_id')
