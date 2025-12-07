@@ -5,3 +5,4 @@ django-crontab
 django-extensions
 psycopg2-binary
 python-dotenv
+whitenoise
