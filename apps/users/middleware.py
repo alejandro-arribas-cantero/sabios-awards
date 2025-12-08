@@ -1,32 +1,23 @@
 from django.shortcuts import redirect
 from django.urls import reverse
-from django.conf import settings
 
-class AuthMiddleware:
+class ForcePasswordChangeMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        # List of paths that don't require authentication
-        exempt_urls = [
-            reverse('login'),
-
-            '/admin/', # Django admin has its own auth
-        ]
+        if request.user.is_authenticated and not request.user.is_superuser:
+            try:
+                profile = request.user.profile
+                if profile.force_password_change:
+                    # Allowed paths
+                    password_change_url = reverse('password_change')
+                    logout_url = reverse('logout')
+                    
+                    if request.path not in [password_change_url, logout_url]:
+                        return redirect('password_change')
+            except:
+                pass
         
-        if request.path.startswith('/static/') or request.path.startswith('/media/'):
-            return self.get_response(request)
-
-        if not request.user.is_authenticated:
-            # Check if current path is exempt
-            is_exempt = False
-            for url in exempt_urls:
-                if request.path.startswith(url):
-                    is_exempt = True
-                    break
-            
-            if not is_exempt:
-                return redirect(settings.LOGIN_URL)
-
         response = self.get_response(request)
         return response

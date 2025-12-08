@@ -33,7 +33,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'apps.users.middleware.AuthMiddleware', # Custom middleware requested
+    'apps.users.middleware.ForcePasswordChangeMiddleware',
 ]
 
 ROOT_URLCONF = 'mvp_vote.urls'

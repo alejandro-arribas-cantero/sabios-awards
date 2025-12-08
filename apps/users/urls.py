@@ -1,11 +1,13 @@
 from django.urls import path
 from .views import RegisterView, LoginView, LogoutView
 from .views_admin import UserListView, UserToggleActiveView, UserDeleteView, UserCreateView
+from .views_password import ForcePasswordChangeView
 
 urlpatterns = [
     # path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(), name='login'),
     path('logout/', LogoutView.as_view(), name='logout'),
+    path('password-change/', ForcePasswordChangeView.as_view(), name='password_change'),
     
     # Admin User Management
     path('admin/users/', UserListView.as_view(), name='admin_user_list'),

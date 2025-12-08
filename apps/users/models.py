@@ -8,6 +8,7 @@ from django.contrib.auth.signals import user_logged_in
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
     login_count = models.PositiveIntegerField(default=0)
+    force_password_change = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
