@@ -31,12 +31,23 @@ class DashboardView(LoginRequiredMixin, View):
         # 4. Check for intro video flag
         show_intro = request.session.pop('show_intro', False)
 
+        # 5. Community Stats
+        from django.db.models import Count
+        from django.contrib.auth.models import User
+        
+        top_voters = User.objects.filter(is_staff=False, is_active=True).annotate(total_votes=Count('votes')).order_by('-total_votes')[:3]
+        most_logins = User.objects.filter(is_staff=False, is_active=True).select_related('profile').order_by('-profile__login_count')[:3]
+        least_logins = User.objects.filter(is_staff=False, is_active=True).select_related('profile').order_by('profile__login_count')[:3]
+
         context = {
             'current_period': current_period,
             'has_voted': has_voted,
             'last_winner_period': last_winner_period,
             'user_votes': user_votes,
             'is_admin': request.user.is_staff,
-            'show_intro': show_intro
+            'show_intro': show_intro,
+            'top_voters': top_voters,
+            'most_logins': most_logins,
+            'least_logins': least_logins,
         }
         return render(request, self.template_name, context)
