@@ -5,48 +5,183 @@
 {% block content %}
 <div class="row mb-5 text-center">
     <div class="col-12">
-        <h1 class="display-4 fw-bold text-primary">🏆 Salón de la Fama</h1>
-        <p class="lead text-muted">Las leyendas que han hecho historia.</p>
+        <h1 class="display-4 fw-bold text-gradient">🏆 Muro de Leyendas</h1>
+        <p class="lead text-muted">La historia se escribe mes a mes.</p>
     </div>
 </div>
 
-<div class="row g-4">
+<div class="timeline">
     {% for legend in legends %}
-    {% with photo=legend.resolved_winner_photo %}
+    {% with photo=legend.resolved_winner_photo winner=legend.get_winner_candidate %}
     {% if photo %}
-    <div class="col-md-6 col-lg-4">
-        <div class="card h-100 shadow-sm">
-            <div class="position-relative">
-                <img src="{{ photo.url }}" class="card-img-top" alt="Ganador {{ legend.month }}/{{ legend.year }}"
-                    style="height: 300px; object-fit: cover;">
-                <div class="position-absolute top-0 end-0 bg-dark text-white px-3 py-1 fw-bold rounded-start mt-3"
-                    style="opacity: 0.9; border: 1px solid var(--gold);">
-                    {{ legend.month }}/{{ legend.year }}
+
+    <div class="timeline-item {% cycle 'left' 'right' %}">
+        <div class="timeline-img"></div>
+
+        <div class="timeline-content card border-0 shadow-lg bg-dark text-white overflow-hidden">
+            <div class="row g-0">
+                <div class="col-md-5 position-relative">
+                    <img src="{{ photo.url }}" class="img-fluid h-100 w-100 object-fit-cover"
+                        alt="Winner {{ legend.month }}/{{ legend.year }}" style="min-height: 250px;">
+                    <div class="position-absolute top-0 start-0 p-2 bg-warning text-dark fw-bold">
+                        {{ legend.month_name }} {{ legend.year }}
+                    </div>
                 </div>
-            </div>
-            <div class="card-body text-center">
-                <h3 class="card-title fw-bold">MVP del Mes</h3>
-                {% with winner=legend.get_winner_candidate %}
-                {% if winner %}
-                <h4 class="text-primary">{{ winner.name }}</h4>
-                {% if winner.nomination_reason %}
-                <p class="card-text small mt-2 text-muted fst-italic">"{{ winner.nomination_reason }}"</p>
-                {% endif %}
-                {% endif %}
-                {% endwith %}
-                <a href="{% url 'period_results' legend.id %}" class="btn btn-outline-primary mt-3">Ver Estadísticas</a>
+                <div class="col-md-7">
+                    <div class="card-body d-flex flex-column h-100 justify-content-center p-4">
+                        <h5 class="text-warning text-uppercase letter-spacing-2 mb-1">MVP DEL MES</h5>
+                        <h2 class="card-title fw-bold mb-3">{{ winner.name }}</h2>
+
+                        {% if winner.nomination_reason %}
+                        <figure class="mt-2">
+                            <blockquote class="blockquote fs-6">
+                                <p class="fst-italic text-light opacity-75">"{{ winner.nomination_reason }}"</p>
+                            </blockquote>
+                        </figure>
+                        {% endif %}
+
+                        <div class="mt-auto pt-3">
+                            <a href="{% url 'period_results' legend.id %}"
+                                class="btn btn-outline-warning btn-sm rounded-pill px-4">
+                                Ver Stats Históricas
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+
     {% endif %}
     {% endwith %}
     {% empty %}
-    <div class="col-12 text-center py-5">
+    <div class="text-center py-5">
         <div class="text-muted">
-            <h3>Aún no hay leyendas...</h3>
-            <p>¡Sé el primero en votar para crear historia!</p>
+            <h3>El cronómetro está en cero...</h3>
+            <p>Aún no hay leyendas forjadas en la historia.</p>
         </div>
     </div>
     {% endfor %}
 </div>
+
+<style>
+    /* Timeline Container */
+    .timeline {
+        position: relative;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 40px 0;
+    }
+
+    /* The Central Line */
+    .timeline::after {
+        content: '';
+        position: absolute;
+        width: 4px;
+        background-color: #ffc107;
+        /* Gold */
+        top: 0;
+        bottom: 0;
+        left: 50%;
+        margin-left: -2px;
+        border-radius: 2px;
+        box-shadow: 0 0 10px rgba(255, 193, 7, 0.3);
+    }
+
+    /* Container around content */
+    .timeline-item {
+        padding: 10px 40px;
+        position: relative;
+        background-color: inherit;
+        width: 50%;
+    }
+
+    /* The circles on the timeline */
+    .timeline-item::after {
+        content: '🏆';
+        position: absolute;
+        width: 40px;
+        height: 40px;
+        right: -20px;
+        background-color: #1a1a1a;
+        border: 4px solid #ffc107;
+        top: 50%;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        z-index: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+    }
+
+    /* Place the item to the left */
+    .left {
+        left: 0;
+    }
+
+    /* Place the item to the right */
+    .right {
+        left: 50%;
+    }
+
+    /* Fix the circle for the right side */
+    .right::after {
+        left: -20px;
+    }
+
+    /* Content styling */
+    .timeline-content {
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(255, 193, 7, 0.2) !important;
+    }
+
+    .timeline-content:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 30px rgba(255, 193, 7, 0.15) !important;
+    }
+
+    /* Text Gradient for Header */
+    .text-gradient {
+        background: linear-gradient(45deg, #ffc107, #ffdb58, #ffffff);
+        -webkit-background-clip: text;
+        background-clip: text;
+        color: transparent;
+        text-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    /* Media queries - Responsive timeline on screens less than 768px */
+    @media screen and (max-width: 768px) {
+
+        /* Place the timelime to the left */
+        .timeline::after {
+            left: 31px;
+        }
+
+        /* Full-width containers */
+        .timeline-item {
+            width: 100%;
+            padding-left: 70px;
+            padding-right: 25px;
+        }
+
+        /* Make sure all circles are at the same spot */
+        .timeline-item::after {
+            left: 11px;
+            /* Adjust for line position */
+            right: auto;
+        }
+
+        /* Make all right elements behave like the left ones */
+        .left::after,
+        .right::after {
+            left: 11px;
+        }
+
+        .right {
+            left: 0%;
+        }
+    }
+</style>
 {% endblock %}
