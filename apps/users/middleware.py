@@ -10,7 +10,7 @@ class AuthMiddleware:
         # List of paths that don't require authentication
         exempt_urls = [
             reverse('login'),
-            reverse('register'),
+
             '/admin/', # Django admin has its own auth
         ]
         
