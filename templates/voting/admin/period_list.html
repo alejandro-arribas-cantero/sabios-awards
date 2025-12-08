@@ -13,9 +13,9 @@
                 <tr>
                     <th>ID</th>
                     <th>Mes/Año</th>
+                    <th>Tipo</th>
                     <th>Estado</th>
                     <th>Ganador</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -23,6 +23,7 @@
                 <tr>
                     <td>{{ period.id }}</td>
                     <td>{{ period.month }}/{{ period.year }}</td>
+                    <td><span class="badge bg-light text-dark border">{{ period.get_voting_type_display }}</span></td>
                     <td>
                         {% if period.status == 'OPEN' %}
                         <span class="badge bg-success">Abierta</span>
