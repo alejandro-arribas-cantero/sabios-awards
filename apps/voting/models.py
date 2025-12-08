@@ -16,6 +16,7 @@ class VotingPeriod(models.Model):
         ('THE_BEST_CUATRI_2', 'The Best of the Cuatri 2 (Ene-May)'),
         ('BALON_ORO', 'Balón de Oro del Curso'),
         ('PUSKAS', 'Puskas'),
+        ('BOTA_ORO_ANO', 'Bota de Oro del Año'),
     ]
 
     month = models.IntegerField()
