@@ -14,6 +14,8 @@
         rel="stylesheet">
     <!-- Custom CSS -->
     <link href="{% static 'css/gala.css' %}" rel="stylesheet">
+    <!-- Toastify CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     {% block extra_css %}{% endblock %}
 </head>
 
@@ -53,15 +55,6 @@
     </nav>
 
     <div class="container">
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-            {{ message }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-        {% endif %}
-
         {% block content %}{% endblock %}
     </div>
 
@@ -70,6 +63,45 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Toastify JS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            {% if messages %}
+            {% for message in messages %}
+            // Map Django tags to colors
+            let bg = "linear-gradient(to right, #4b6cb7, #182848)"; // Default/Info
+
+            {% if message.tags == 'success' %}
+            bg = "linear-gradient(to right, #00b09b, #96c93d)";
+            {% elif message.tags == 'error' or message.tags == 'danger' %}
+            bg = "linear-gradient(to right, #ff5f6d, #ffc371)";
+            {% elif message.tags == 'warning' %}
+            bg = "linear-gradient(to right, #f6d365, #fda085)";
+            {% endif %}
+
+            Toastify({
+                text: "{{ message|escapejs }}",
+                duration: 4000,
+                close: true,
+                gravity: "top",
+                position: "right",
+                stopOnFocus: true,
+                style: {
+                    background: bg,
+                    boxShadow: "0 4px 15px rgba(0, 0, 0, 0.2)",
+                    borderRadius: "10px",
+                    fontFamily: "'Inter', sans-serif",
+                    fontWeight: "600",
+                },
+                onClick: function () { } // Callback after click
+            }).showToast();
+            {% endfor %}
+            {% endif %}
+        });
+    </script>
     {% block extra_js %}{% endblock %}
 </body>
 
