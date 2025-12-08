@@ -23,6 +23,8 @@ class LoginView(FormView):
 
     def form_valid(self, form):
         login(self.request, form.get_user())
+        # Set flag to show intro video
+        self.request.session['show_intro'] = True
         messages.success(self.request, "Has iniciado sesión correctamente.")
         return super().form_valid(form)
 

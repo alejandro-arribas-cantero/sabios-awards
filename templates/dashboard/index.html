@@ -98,4 +98,100 @@
     </div>
 </div>
 {% endif %}
+
+{% if show_intro %}
+<!-- Intro Video Overlay -->
+<div id="intro-overlay"
+    class="position-fixed top-0 start-0 w-100 h-100 bg-black d-flex justify-content-center align-items-center"
+    style="z-index: 9999;">
+
+    <!-- Removed 'muted' to allow sound. Removed 'autoplay' to handle it via JS for consistency -->
+    <video id="intro-video" class="w-100 h-100" style="object-fit: cover;" playsinline>
+        <source src="https://res.cloudinary.com/dpqalrq6d/video/upload/v1765221847/videoSabiosAwards_fdz5uh.mp4"
+            type="video/mp4">
+        Tu navegador no soporta videos HTML5.
+    </video>
+
+    <!-- Start Button (Hidden by default, shown if autoplay fails) -->
+    <button id="start-btn"
+        class="btn btn-warning btn-lg position-absolute rounded-pill fw-bold px-5 py-3 shadow-lg pulse-animation"
+        style="z-index: 10001; display: none;">
+        🎬 INICIAR GALA
+    </button>
+
+    <button id="skip-btn"
+        class="btn btn-outline-light position-absolute bottom-0 end-0 m-5 px-4 py-2 rounded-pill border-2 fw-bold"
+        style="z-index: 10000;">
+        SALTAR INTRO
+    </button>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const overlay = document.getElementById('intro-overlay');
+        const video = document.getElementById('intro-video');
+        const skipBtn = document.getElementById('skip-btn');
+        const startBtn = document.getElementById('start-btn');
+
+        function closeIntro() {
+            overlay.style.transition = 'opacity 1s ease';
+            overlay.style.opacity = '0';
+            setTimeout(() => {
+                overlay.remove();
+            }, 1000);
+        }
+
+        video.addEventListener('ended', closeIntro);
+
+        skipBtn.addEventListener('click', function () {
+            video.pause();
+            closeIntro();
+        });
+
+        startBtn.addEventListener('click', function () {
+            startBtn.style.display = 'none';
+            video.play();
+            video.muted = false; // Ensure unmuted
+        });
+
+        // Attempt automatic playback with sound
+        video.muted = false;
+        const playPromise = video.play();
+
+        if (playPromise !== undefined) {
+            playPromise.then(_ => {
+                // Auto-play started successfully!
+            })
+                .catch(error => {
+                    // Auto-play was prevented. Show a UI element to let the user manually start playback.
+                    console.log("Autoplay prevented (policy). Showing start button.");
+                    startBtn.style.display = 'block';
+                    // We could also try muting and playing, but the user wants sound.
+                    // So we wait for the click.
+                });
+        }
+    });
+</script>
+
+<style>
+    .pulse-animation {
+        animation: pulse-gold 2s infinite;
+    }
+
+    @keyframes pulse-gold {
+        0% {
+            box-shadow: 0 0 0 0 rgba(255, 193, 7, 0.7);
+        }
+
+        70% {
+            box-shadow: 0 0 0 20px rgba(255, 193, 7, 0);
+        }
+
+        100% {
+            box-shadow: 0 0 0 0 rgba(255, 193, 7, 0);
+        }
+    }
+</style>
+{% endif %}
+
 {% endblock %}

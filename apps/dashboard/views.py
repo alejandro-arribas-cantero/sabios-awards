@@ -28,11 +28,15 @@ class DashboardView(LoginRequiredMixin, View):
         # 3. User History
         user_votes = Vote.objects.filter(user=request.user).order_by('-timestamp')[:5]
 
+        # 4. Check for intro video flag
+        show_intro = request.session.pop('show_intro', False)
+
         context = {
             'current_period': current_period,
             'has_voted': has_voted,
             'last_winner_period': last_winner_period,
             'user_votes': user_votes,
-            'is_admin': request.user.is_staff
+            'is_admin': request.user.is_staff,
+            'show_intro': show_intro
         }
         return render(request, self.template_name, context)
