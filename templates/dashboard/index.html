@@ -12,23 +12,36 @@
 
 <div class="row g-4">
     <!-- Voting Card -->
+    <!-- Voting Cards -->
     <div class="col-md-6 col-lg-4">
         <div class="card h-100 border-primary border-2">
             <div class="card-body text-center d-flex flex-column justify-content-center">
-                <h3 class="card-title text-primary">Votación del Mes</h3>
-                {% if current_period %}
-                <p class="card-text">Periodo: {{ current_period.month }}/{{ current_period.year }}</p>
-                {% if has_voted %}
-                <div class="alert alert-success">
-                    <i class="bi bi-check-circle"></i> Ya has votado
+                <h3 class="card-title text-primary mb-4">Votaciones Activas</h3>
+
+                {% if active_periods %}
+                <div class="d-grid gap-3">
+                    {% for item in active_periods %}
+                    <div class="border rounded p-3 {% if item.has_voted %}bg-light{% else %}border-primary{% endif %}">
+                        <h5 class="fw-bold">{{ item.period.get_voting_type_display }}</h5>
+                        <p class="text-muted small mb-2">
+                            {{ item.period.month_name }} {{ item.period.year }}
+                        </p>
+
+                        {% if item.has_voted %}
+                        <div class="text-success small fw-bold">
+                            <i class="bi bi-check-circle"></i> Voto Registrado
+                        </div>
+                        {% else %}
+                        <a href="{% url 'cast_vote_period' item.period.id %}" class="btn btn-primary btn-sm w-100">
+                            Votar Ahora
+                        </a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
                 </div>
-                <p class="text-muted small mt-auto">Los resultados se revelarán el día 1 del próximo mes.</p>
+                <p class="text-muted small mt-auto pt-3">Los resultados se revelarán al cierre.</p>
                 {% else %}
-                <p class="text-success fw-bold">¡Votación Abierta!</p>
-                <a href="{% url 'cast_vote' %}" class="btn btn-primary btn-lg mt-auto">Votar Ahora</a>
-                {% endif %}
-                {% else %}
-                <p class="text-muted">No hay votación activa en este momento.</p>
+                <p class="text-muted">No hay ninguna votación activa en este momento.</p>
                 <button class="btn btn-secondary mt-auto" disabled>Votación Cerrada</button>
                 {% endif %}
             </div>

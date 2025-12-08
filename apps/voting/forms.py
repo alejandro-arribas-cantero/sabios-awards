@@ -17,9 +17,10 @@ class VotingPeriodForm(forms.ModelForm):
 
     class Meta:
         model = VotingPeriod
-        fields = ['month', 'year', 'status', 'winner_photo', 'manual_winner']
+        fields = ['month', 'year', 'voting_type', 'status', 'winner_photo', 'manual_winner']
         widgets = {
             'year': forms.NumberInput(attrs={'class': 'form-control'}),
+            'voting_type': forms.Select(attrs={'class': 'form-select'}),
             'status': forms.Select(attrs={'class': 'form-select'}),
             'winner_photo': forms.FileInput(attrs={'class': 'form-control'}),
             'manual_winner': forms.Select(attrs={'class': 'form-select'}),

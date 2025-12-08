@@ -11,16 +11,16 @@ class DashboardView(LoginRequiredMixin, View):
     def get(self, request):
         now = timezone.now()
         
-        # 1. Check for Open Voting
-        current_period = VotingPeriod.objects.filter(
-            month=now.month, 
-            year=now.year, 
-            status='OPEN'
-        ).first()
+        # 1. Check for Active Voting Periods
+        open_periods = VotingPeriod.objects.filter(status='OPEN')
         
-        has_voted = False
-        if current_period:
-            has_voted = Vote.objects.filter(user=request.user, period=current_period).exists()
+        active_periods_data = []
+        for p in open_periods:
+            has_voted = Vote.objects.filter(user=request.user, period=p).exists()
+            active_periods_data.append({
+                'period': p,
+                'has_voted': has_voted
+            })
 
         # 2. Previous Winner (Last REVEALED period)
         last_winner_period = VotingPeriod.objects.filter(status='REVEALED').order_by('-year', '-month').first()
@@ -40,8 +40,7 @@ class DashboardView(LoginRequiredMixin, View):
         least_logins = User.objects.filter(is_staff=False, is_active=True).select_related('profile').order_by('profile__login_count')[:3]
 
         context = {
-            'current_period': current_period,
-            'has_voted': has_voted,
+            'active_periods': active_periods_data,
             'last_winner_period': last_winner_period,
             'user_votes': user_votes,
             'is_admin': request.user.is_staff,

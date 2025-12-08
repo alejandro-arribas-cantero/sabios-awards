@@ -10,32 +10,30 @@ from apps.dashboard.models import log_activity
 class VoteView(LoginRequiredMixin, View):
     template_name = 'voting/vote.html'
 
-    def get(self, request):
+    def get(self, request, period_id=None):
         now = timezone.now()
-        # Find active period
-        period = VotingPeriod.objects.filter(
-            month=now.month, 
-            year=now.year, 
-            status='OPEN'
-        ).first()
+        
+        if period_id:
+            period = get_object_or_404(VotingPeriod, id=period_id, status='OPEN')
+        else:
+            # Find any active period
+            period = VotingPeriod.objects.filter(status='OPEN').first()
 
         if not period:
             return render(request, 'voting/no_vote.html', {'message': 'No hay votación activa en este momento.'})
 
-        # Check if user voted
+        # Check if user voted for this specific period
         if Vote.objects.filter(user=request.user, period=period).exists():
             return render(request, 'voting/already_voted.html', {'period': period})
 
         candidates = period.candidates.all()
         return render(request, self.template_name, {'period': period, 'candidates': candidates})
 
-    def post(self, request):
-        now = timezone.now()
-        period = VotingPeriod.objects.filter(
-            month=now.month, 
-            year=now.year, 
-            status='OPEN'
-        ).first()
+    def post(self, request, period_id=None):
+        if period_id:
+            period = get_object_or_404(VotingPeriod, id=period_id, status='OPEN')
+        else:
+            period = VotingPeriod.objects.filter(status='OPEN').first()
 
         if not period:
             messages.error(request, "La votación ha cerrado o no existe.")
@@ -49,7 +47,7 @@ class VoteView(LoginRequiredMixin, View):
         candidate = get_object_or_404(Candidate, id=candidate_id, period=period)
 
         Vote.objects.create(user=request.user, period=period, candidate=candidate)
-        log_activity(request.user, 'VOTE', f"Votó por {candidate.name} en {period.month}/{period.year}")
+        log_activity(request.user, 'VOTE', f"Votó por {candidate.name} en {period}")
         messages.success(request, "¡Tu voto ha sido registrado!")
         return redirect('dashboard')
 

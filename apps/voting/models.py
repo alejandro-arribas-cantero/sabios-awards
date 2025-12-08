@@ -10,19 +10,28 @@ class VotingPeriod(models.Model):
         ('REVEALED', 'Resultados Públicos'),
     ]
 
+    TYPE_CHOICES = [
+        ('MVP_MONTH', 'MVP del Mes'),
+        ('THE_BEST_CUATRI_1', 'The Best of the Cuatri 1 (Sep-Dic)'),
+        ('THE_BEST_CUATRI_2', 'The Best of the Cuatri 2 (Ene-May)'),
+        ('BALON_ORO', 'Balón de Oro del Curso'),
+        ('PUSKAS', 'Puskas'),
+    ]
+
     month = models.IntegerField()
     year = models.IntegerField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='OPEN')
+    voting_type = models.CharField(max_length=20, choices=TYPE_CHOICES, default='MVP_MONTH', verbose_name="Tipo de Votación")
     winner_photo = models.ImageField(upload_to='winners/', blank=True, null=True)
     manual_winner = models.ForeignKey('Candidate', on_delete=models.SET_NULL, null=True, blank=True, related_name='won_periods', verbose_name="Ganador Manual")
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ('month', 'year')
+        unique_together = ('month', 'year', 'voting_type')
         ordering = ['-year', '-month']
 
     def __str__(self):
-        return f"{self.month}/{self.year} - {self.get_status_display()}"
+        return f"{self.get_voting_type_display()} - {self.month}/{self.year} - {self.get_status_display()}"
 
     @property
     def month_name(self):

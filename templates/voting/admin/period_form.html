@@ -18,8 +18,19 @@
             <hr class="my-4" style="border-color: var(--gold);">
             <div class="d-flex justify-content-between align-items-center mb-3">
                 <h4 class="text-primary">Candidatos</h4>
-                <a href="{% url 'admin_candidate_create' form.instance.pk %}" class="btn btn-sm btn-primary">+ Añadir
-                    Candidato</a>
+                <div class="btn-group">
+                    {% if form.instance.voting_type == 'THE_BEST_CUATRI_1' or form.instance.voting_type == 'THE_BEST_CUATRI_2' %}
+                    <form action="{% url 'admin_period_populate' form.instance.pk %}" method="post" class="d-inline">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-outline-warning me-2"
+                            onclick="return confirm('¿Importar ganadores de los meses correspondientes?')">
+                            ⚡ Importar Ganadores
+                        </button>
+                    </form>
+                    {% endif %}
+                    <a href="{% url 'admin_candidate_create' form.instance.pk %}" class="btn btn-sm btn-primary">+
+                        Añadir Candidato</a>
+                </div>
             </div>
             <ul class="list-group">
                 {% for candidate in candidates %}

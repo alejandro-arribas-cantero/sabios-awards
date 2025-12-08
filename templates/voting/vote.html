@@ -6,7 +6,8 @@
 <div class="row mb-4">
     <div class="col-12 text-center">
         <h1>Votación {{ period.month }}/{{ period.year }}</h1>
-        <p class="lead">Elige al MVP del mes. Solo puedes votar una vez.</p>
+        <p class="lead">Elige al ganador de <strong>{{ period.get_voting_type_display }}</strong>. Solo puedes votar una
+            vez.</p>
     </div>
 </div>
 

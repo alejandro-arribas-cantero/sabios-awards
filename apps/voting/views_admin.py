@@ -97,3 +97,55 @@ class StatsView(AdminRequiredMixin, TemplateView):
         context['top_voters'] = users
         
         return context
+from django.views import View
+from django.contrib import messages
+
+class PopulateCandidatesView(AdminRequiredMixin, View):
+    def post(self, request, pk):
+        target_period = get_object_or_404(VotingPeriod, pk=pk)
+        
+        month_range = []
+        target_year = target_period.year
+        
+        if target_period.voting_type == 'THE_BEST_CUATRI_1':
+            # Sep to Dec of same year
+            month_range = [9, 10, 11, 12]
+        elif target_period.voting_type == 'THE_BEST_CUATRI_2':
+            # Jan to May of same year
+            month_range = [1, 2, 3, 4, 5]
+        else:
+            messages.warning(request, "Esta automatización solo funciona para 'The Best of the Cuatri'.")
+            return redirect('admin_period_update', pk=pk)
+
+        # Find source periods
+        source_periods = VotingPeriod.objects.filter(
+            year=target_year,
+            month__in=month_range,
+            voting_type='MVP_MONTH', # Only pull from standard monthly votes
+            status__in=['CLOSED', 'REVEALED'] # Must be finished
+        )
+
+        added_count = 0
+        for p in source_periods:
+            winner = p.get_winner_candidate()
+            if winner:
+                # Check if already exists in target
+                if not Candidate.objects.filter(period=target_period, name=winner.name).exists():
+                    reason = f"Ganador MVP {p.month_name} {p.year}"
+                    if winner.nomination_reason:
+                        reason += f". Motivo original: {winner.nomination_reason}"
+                    
+                    Candidate.objects.create(
+                        period=target_period,
+                        name=winner.name,
+                        photo=winner.photo, # Copy photo reference
+                        nomination_reason=reason
+                    )
+                    added_count += 1
+        
+        if added_count > 0:
+            messages.success(request, f"Se importaron {added_count} candidatos automáticamente.")
+        else:
+            messages.info(request, "No se encontraron nuevos ganadores para importar.")
+
+        return redirect('admin_period_update', pk=pk)
