@@ -35,10 +35,11 @@ class VotingPeriodForm(forms.ModelForm):
 class CandidateForm(forms.ModelForm):
     class Meta:
         model = Candidate
-        fields = ['period', 'name', 'photo', 'photo_winner']
+        fields = ['period', 'name', 'photo', 'photo_winner', 'nomination_reason']
         widgets = {
             'period': forms.Select(attrs={'class': 'form-select'}),
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'photo': forms.FileInput(attrs={'class': 'form-control'}),
             'photo_winner': forms.FileInput(attrs={'class': 'form-control'}),
+            'nomination_reason': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
         }

@@ -15,25 +15,43 @@
     <div class="row g-4 justify-content-center">
         {% for candidate in candidates %}
         <div class="col-md-6 col-lg-3">
-            <div class="card h-100 candidate-card">
-                {% if candidate.photo %}
-                <img src="{{ candidate.photo.url }}" class="card-img-top" alt="{{ candidate.name }}"
-                    style="height: 250px; object-fit: cover;">
-                {% else %}
-                <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
-                    style="height: 250px;">
-                    <span>Sin Foto</span>
-                </div>
-                {% endif %}
-                <div class="card-body text-center">
-                    <h5 class="card-title fw-bold">{{ candidate.name }}</h5>
-                    <div class="form-check mt-3 d-inline-block">
-                        <input class="form-check-input" type="radio" name="candidate" id="cand_{{ candidate.id }}"
-                            value="{{ candidate.id }}" required>
-                        <label class="form-check-label stretched-link" for="cand_{{ candidate.id }}">
-                            Seleccionar
-                        </label>
+            <div class="card h-100 candidate-card-container border-0 bg-transparent">
+                <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front card shadow-sm h-100">
+                            {% if candidate.photo %}
+                            <img src="{{ candidate.photo.url }}" class="card-img-top" alt="{{ candidate.name }}"
+                                style="height: 300px; object-fit: cover;">
+                            {% else %}
+                            <div class="bg-secondary text-white d-flex align-items-center justify-content-center"
+                                style="height: 300px;">
+                                <span>Sin Foto</span>
+                            </div>
+                            {% endif %}
+                            <div class="card-img-overlay d-flex align-items-end gradient-overlay">
+                                <h5 class="card-title text-white fw-bold mb-0 text-shadow">{{ candidate.name }}</h5>
+                            </div>
+                            <div class="position-absolute top-0 end-0 p-2">
+                                <span class="badge bg-light text-dark opacity-75">Click para info</span>
+                            </div>
+                        </div>
+                        <div
+                            class="flip-card-back card shadow-sm h-100 bg-dark text-white p-4 d-flex align-items-center justify-content-center text-center">
+                            <div>
+                                <h5 class="fw-bold mb-3">{{ candidate.name }}</h5>
+                                <p class="small">{{ candidate.nomination_reason|default:"Sin motivos especificados para
+                                    esta nominación." }}</p>
+                            </div>
+                        </div>
                     </div>
+                </div>
+
+                <div class="text-center mt-3">
+                    <input type="radio" class="btn-check" name="candidate" id="cand_{{ candidate.id }}"
+                        value="{{ candidate.id }}" required>
+                    <label class="btn btn-outline-light w-100 fw-bold" for="cand_{{ candidate.id }}">
+                        Votar por {{ candidate.name }}
+                    </label>
                 </div>
             </div>
         </div>
@@ -47,24 +65,90 @@
     {% if candidates %}
     <div class="row mt-5">
         <div class="col-12 text-center">
-            <button type="submit" class="btn btn-primary btn-lg px-5">Confirmar Voto</button>
-            <a href="{% url 'dashboard' %}" class="btn btn-link text-muted">Cancelar</a>
+            <button type="submit" class="btn btn-warning btn-lg px-5 fw-bold text-dark shadow-sm">Confirmar
+                Voto</button>
+            <div class="mt-3">
+                <a href="{% url 'dashboard' %}" class="text-muted text-decoration-none">Cancelar</a>
+            </div>
         </div>
     </div>
     {% endif %}
 </form>
 
 <style>
-    .candidate-card {
+    /* Flip Card CSS */
+    .flip-card {
+        background-color: transparent;
+        height: 300px;
+        perspective: 1000px;
         cursor: pointer;
-        transition: all 0.2s;
     }
 
-    .candidate-card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.6s;
+        transform-style: preserve-3d;
     }
 
-    /* Hide radio but keep accessible? Or just style it. */
+    .flip-card.flipped .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    .flip-card-front,
+    .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        -webkit-backface-visibility: hidden;
+        backface-visibility: hidden;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .flip-card-back {
+        transform: rotateY(180deg);
+        background: linear-gradient(145deg, #1a1a1a, #2c2c2c);
+        border: 1px solid #444;
+    }
+
+    .gradient-overlay {
+        background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        padding-bottom: 20px;
+        padding-left: 15px;
+    }
+
+    .text-shadow {
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    }
+
+    /* Btn Check Styles */
+    .btn-outline-light:hover {
+        color: #000;
+        background-color: #f8f9fa;
+    }
+
+    .btn-check:checked+.btn-outline-light {
+        background-color: #ffc107;
+        border-color: #ffc107;
+        color: #000;
+        box-shadow: 0 0 15px rgba(255, 193, 7, 0.5);
+    }
+
+    /* Override global card styles to prevent interference */
+    .candidate-card-container.card:hover {
+        transform: none !important;
+        box-shadow: none !important;
+    }
+
+    .flip-card-front.card:hover {
+        transform: none !important;
+    }
+
+    .flip-card-back.card:hover {
+        transform: rotateY(180deg) !important;
+    }
 </style>
 {% endblock %}

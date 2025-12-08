@@ -29,6 +29,9 @@
                 {% with winner=legend.get_winner_candidate %}
                 {% if winner %}
                 <h4 class="text-primary">{{ winner.name }}</h4>
+                {% if winner.nomination_reason %}
+                <p class="card-text small mt-2 text-muted fst-italic">"{{ winner.nomination_reason }}"</p>
+                {% endif %}
                 {% endif %}
                 {% endwith %}
                 <a href="{% url 'period_results' legend.id %}" class="btn btn-outline-primary mt-3">Ver Estadísticas</a>
