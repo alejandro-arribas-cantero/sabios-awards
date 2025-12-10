@@ -1,5 +1,31 @@
 from django.shortcuts import redirect
 from django.urls import reverse
+from django.conf import settings
+
+class LoginRequiredMiddleware:
+    def __init__(self, get_response):
+        self.get_response = get_response
+
+    def __call__(self, request):
+        if not request.user.is_authenticated:
+            path = request.path
+            try:
+                login_url = reverse('login')
+            except:
+                login_url = '/auth/login/' # Fallback
+            
+            # Allow access to login page
+            if path == login_url:
+                return self.get_response(request)
+                
+            # Allow access to static and media files
+            if path.startswith(settings.STATIC_URL) or path.startswith(settings.MEDIA_URL):
+                return self.get_response(request)
+            
+            # Redirect to login
+            return redirect(f"{login_url}?next={path}")
+            
+        return self.get_response(request)
 
 class ForcePasswordChangeMiddleware:
     def __init__(self, get_response):
@@ -21,3 +47,4 @@ class ForcePasswordChangeMiddleware:
         
         response = self.get_response(request)
         return response
+
