@@ -39,6 +39,11 @@
             overflow: hidden;
         }
 
+        .countdown-content {
+            position: relative;
+            z-index: 10;
+        }
+
         .countdown-item {
             display: flex;
             flex-direction: column;
@@ -72,21 +77,120 @@
             height: 100%;
             background: radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.1) 0%, transparent 60%);
             pointer-events: none;
-            z-index: -1;
+            z-index: 1;
+        }
+
+        /* Bubble Animation */
+        .bubble-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .bubble {
+            position: absolute;
+            bottom: -150px;
+            border-radius: 50%;
+            opacity: 0;
+            animation: rise var(--duration) linear infinite;
+            left: var(--left);
+            width: var(--size);
+            height: var(--size);
+            object-fit: cover;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        @keyframes rise {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 0;
+            }
+
+            10% {
+                opacity: 0.7;
+            }
+
+            90% {
+                opacity: 0.7;
+            }
+
+            100% {
+                transform: translateY(-120vh) scale(1.1);
+                opacity: 0;
+            }
         }
     </style>
 
     <div id="launch-countdown-overlay">
         <div class="glow-effect"></div>
-        <h1 class="display-4 fw-bold mb-5" style="font-family: 'Playfair Display', serif; letter-spacing: 2px;">EL SHOW
-            COMIENZA EN</h1>
-        <div id="countdown-timer" class="d-flex flex-wrap justify-content-center"></div>
+        <div id="bubble-container" class="bubble-container"></div>
+
+        <div class="countdown-content">
+            <h1 class="display-4 fw-bold mb-5" style="font-family: 'Playfair Display', serif; letter-spacing: 2px;">EL
+                SHOW
+                COMIENZA EN</h1>
+            <div id="countdown-timer" class="d-flex flex-wrap justify-content-center"></div>
+        </div>
     </div>
 
     <script>
         (function () {
-            // Cambio de la fecha objetivo
-            const targetDate = new Date('2025-12-10T15:10:00+01:00').getTime();
+            // Bubble Configuration
+            const bubbleImages = [
+                "v1765368041/deLorenzo_iz7ltj.png", "v1765368037/larena_nj1vlg.png", "v1765368036/david_pabjfy.png",
+                "v1765368035/illan_qbf4pc.png", "v1765368032/miguel_keuohh.png", "v1765368030/pedro_qw699h.png",
+                "v1765368029/ponce_zsqei6.png", "v1765368027/touza_c6u9ha.png", "v1765368026/ivanFran_adfppu.png",
+                "v1765368023/diego_kgcukz.png", "v1765368022/mario_powmqq.png", "v1765368022/arribas_fkcaoj.png"
+            ];
+            const cloudName = "dpqalrq6d"; // Extracted from existing code if available or assumed
+            const baseUrl = `https://res.cloudinary.com/${cloudName}/image/upload/`;
+
+            function createBubble() {
+                const container = document.getElementById('bubble-container');
+                const overlay = document.getElementById('launch-countdown-overlay');
+
+                // Stop creating bubbles if overlay is hidden or gone
+                if (!container || !overlay || overlay.style.display === 'none') return;
+
+                const imgId = bubbleImages[Math.floor(Math.random() * bubbleImages.length)];
+                const img = document.createElement('img');
+                img.src = `${baseUrl}${imgId}`;
+                img.classList.add('bubble');
+
+                // Randomize properties
+                const size = Math.random() * 80 + 40; // 40px to 120px
+                const left = Math.random() * 90 + 5; // 5% to 95%
+                const duration = Math.random() * 10 + 10; // 10s to 20s speed
+                const delay = Math.random() * 5; // 0 to 5s delay for stagger
+
+                img.style.setProperty('--size', `${size}px`);
+                img.style.setProperty('--left', `${left}%`);
+                img.style.setProperty('--duration', `${duration}s`);
+
+                container.appendChild(img);
+
+                // Auto remove after animation completes (plus buffer)
+                setTimeout(() => {
+                    if (img.parentNode) img.parentNode.removeChild(img);
+                }, (duration + 1) * 1000);
+            }
+
+            // Start bubble loop inside the IIFE
+            // Generate initial batch
+            for (let i = 0; i < 10; i++) {
+                setTimeout(createBubble, i * 500);
+            }
+            // Continuous generation
+            setInterval(createBubble, 1500);
+
+
+            // Cambio de la fecha objeti                                                                    vo
+            const targetDate = new Date('2025-12-10T15:28:00+01:00').getTime();
             const overlay = document.getElementById('launch-countdown-overlay');
             const timerContainer = document.getElementById('countdown-timer');
 
