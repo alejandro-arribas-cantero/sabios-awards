@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from cloudinary_storage.storage import VideoMediaCloudinaryStorage
+from django.conf import settings
 
 class VotingPeriod(models.Model):
     STATUS_CHOICES = [
@@ -71,6 +73,14 @@ class Candidate(models.Model):
     name = models.CharField(max_length=100)
     photo = models.ImageField(upload_to='candidates/')
     photo_winner = models.ImageField(upload_to='candidates/winners/', blank=True, null=True, verbose_name="Foto Ganador")
+    video_speech = models.FileField(
+        upload_to='candidates/videos/', 
+        blank=True, 
+        null=True, 
+        verbose_name="Video Discurso",
+        storage=VideoMediaCloudinaryStorage(),
+        help_text="Sube un video de discurso (formato mp4, mov, avi)"
+    )
     nomination_reason = models.TextField(blank=True, null=True, verbose_name="Motivo de Nominación")
     
     def __str__(self):

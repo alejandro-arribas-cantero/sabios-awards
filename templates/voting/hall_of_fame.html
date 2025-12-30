@@ -45,6 +45,16 @@
                                 class="btn btn-outline-warning btn-sm rounded-pill px-4">
                                 Ver Stats Históricas
                             </a>
+                            {% if winner.video_speech %}
+                            <button type="button" 
+                                    class="btn btn-warning btn-sm rounded-pill px-4 ms-2"
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#videoModal" 
+                                    data-video-url="{{ winner.video_speech.url }}"
+                                    data-candidate-name="{{ winner.name }}">
+                                🎥 Ver Discurso
+                            </button>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -63,6 +73,52 @@
     </div>
     {% endfor %}
 </div>
+
+<!-- Video Modal -->
+<div class="modal fade" id="videoModal" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content bg-dark border-warning">
+      <div class="modal-header border-bottom-0">
+        <h5 class="modal-title text-warning" id="videoModalLabel">Discurso de Victoria</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-0 bg-black">
+        <div class="ratio ratio-16x9">
+            <video id="modalVideo" controls class="w-100 h-100">
+                <source src="" type="video/mp4">
+                Tu navegador no soporta el tag de video.
+            </video>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var videoModal = document.getElementById('videoModal');
+        var videoElement = document.getElementById('modalVideo');
+        var videoSource = videoElement.querySelector('source');
+        var modalTitle = document.getElementById('videoModalLabel');
+
+        videoModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget;
+            var videoUrl = button.getAttribute('data-video-url');
+            var candidateName = button.getAttribute('data-candidate-name');
+
+            modalTitle.textContent = 'Discurso de ' + candidateName;
+            videoSource.src = videoUrl;
+            videoElement.load();
+            // Optional: Auto-play
+             videoElement.play().catch(e => console.log("Autoplay prevented"));
+        });
+
+        videoModal.addEventListener('hidden.bs.modal', function () {
+            videoElement.pause();
+            videoSource.src = '';
+        });
+    });
+</script>
 
 <style>
     /* Timeline Container */
